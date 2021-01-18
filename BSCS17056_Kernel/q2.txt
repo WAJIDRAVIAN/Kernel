@@ -1,0 +1,31 @@
+
+	GETNEXT:
+				getagain:
+				MOV BX,[cs:CURPROC]
+				SHL BX,5
+
+				MOV AL,[cs:PCB+BX+Priority]
+				XOR AH,AH
+				cmp al,0x0
+				jne endgetNextState
+				;
+				;add above code to top of the GETNEXT
+				
+				-----------------------------------
+	SAVESTATE:
+
+				PUSH BX
+				PUSH DS
+				PUSH CS
+				POP DS
+				MOV BX, [CS:CURPROC]
+				SHL BX,5
+				MOV [cs:PCB+BX+AXSAVE],AX ; saving ax
+				MOV AX, [cs:PCB+BX+Priority]
+				cmp AX,0x00
+				je skip
+				sub AX,1
+				skip:
+				MOV [cs:PCB+BX+Priority],AX
+				;
+				; add above code to the top of the SAVESTATE
